@@ -80,13 +80,15 @@ class Swiper extends Component {
     return propsChanged || stateChanged
   }
 
+  componentWillUnmountAfterInteractions = () => {
+    this.state.pan.x.removeAllListeners()
+    this.state.pan.y.removeAllListeners()
+    this.dimensionsChangeSubscription?.remove()
+  }
+
   componentWillUnmount = () => {
-    this._mounted = false
-    InteractionManager.runAfterInteractions(() => {
-      this.state.pan.x.removeAllListeners()
-      this.state.pan.y.removeAllListeners()
-      this.dimensionsChangeSubscription?.remove()
-    })
+    this._mounted = false;
+    InteractionManager.runAfterInteractions(componentWillUnmountAfterInteractions.bind(this));
   }
 
   getCardStyle = () => {

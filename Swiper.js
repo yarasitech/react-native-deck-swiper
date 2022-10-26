@@ -41,7 +41,7 @@ class Swiper extends Component {
     this.state = {
       ...calculateCardIndexes(props.cardIndex, props.cards),
       pan: new Animated.ValueXY(),
-      cards: props.cards,
+
       previousCardX: new Animated.Value(props.previousCardDefaultPositionX),
       previousCardY: new Animated.Value(props.previousCardDefaultPositionY),
       swipedAllCards: false,
@@ -88,7 +88,7 @@ class Swiper extends Component {
 
   componentWillUnmount = () => {
     this._mounted = false;
-    InteractionManager.runAfterInteractions(componentWillUnmountAfterInteractions.bind(this));
+    InteractionManager.runAfterInteractions(this.componentWillUnmountAfterInteractions.bind(this));
   }
 
   getCardStyle = () => {
@@ -351,6 +351,11 @@ class Swiper extends Component {
       useNativeDriver: true
     }).start(cb)
 
+
+    this.state.pan.setValue({
+      x: 0,
+      y: 0
+    })
     this.state.pan.setOffset({
       x: 0,
       y: 0
@@ -468,8 +473,8 @@ class Swiper extends Component {
   }
 
   animateStack = () => {
-    const { cards, secondCardIndex, swipedAllCards } = this.state
-    let { stackSize, infinite, showSecondCard } = this.props
+    const { secondCardIndex, swipedAllCards } = this.state
+    let { stackSize, infinite, showSecondCard, cards } = this.props
     let index = secondCardIndex
 
     while (stackSize-- > 1 && showSecondCard && !swipedAllCards) {
@@ -509,7 +514,7 @@ class Swiper extends Component {
 
     this.onSwipedCallbacks(onSwiped)
 
-    const allSwipedCheck = () => newCardIndex === this.state.cards.length
+    const allSwipedCheck = () => newCardIndex === this.props.cards.length
 
     if (allSwipedCheck()) {
       if (!infinite) {
@@ -528,7 +533,7 @@ class Swiper extends Component {
 
   decrementCardIndex = cb => {
     const { firstCardIndex } = this.state
-    const lastCardIndex = this.state.cards.length - 1
+    const lastCardIndex = this.props.cards.length - 1
     const previousCardIndex = firstCardIndex - 1
 
     const newCardIndex =
@@ -539,7 +544,7 @@ class Swiper extends Component {
   }
 
   jumpToCardIndex = newCardIndex => {
-    if (this.state.cards[newCardIndex]) {
+    if (this.props.cards[newCardIndex]) {
       this.setCardIndex(newCardIndex, false)
     }
   }
@@ -555,10 +560,10 @@ class Swiper extends Component {
 
   onSwipedCallbacks = (swipeDirectionCallback) => {
     const previousCardIndex = this.state.firstCardIndex
-    this.props.onSwiped(previousCardIndex, this.state.cards[previousCardIndex])
+    this.props.onSwiped(previousCardIndex, this.props.cards[previousCardIndex])
     this.setState(this.rebuildStackValues)
     if (swipeDirectionCallback) {
-      swipeDirectionCallback(previousCardIndex, this.state.cards[previousCardIndex])
+      swipeDirectionCallback(previousCardIndex, this.props.cards[previousCardIndex])
     }
   }
 
@@ -566,7 +571,7 @@ class Swiper extends Component {
     if (this._mounted) {
       this.setState(
         {
-          ...calculateCardIndexes(newCardIndex, this.state.cards),
+          ...calculateCardIndexes(newCardIndex, this.props.cards),
           swipedAllCards: swipedAllCards,
           panResponderLocked: false
         },
@@ -774,7 +779,8 @@ class Swiper extends Component {
   }
 
   renderStack = () => {
-    const { cards, firstCardIndex, swipedAllCards } = this.state
+    const { firstCardIndex, swipedAllCards } = this.state
+    const { cards } = this.props
     const renderedCards = []
     let { stackSize, infinite, showSecondCard } = this.props
     let index = firstCardIndex

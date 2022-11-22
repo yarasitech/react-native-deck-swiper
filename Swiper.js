@@ -351,11 +351,6 @@ class Swiper extends Component {
       useNativeDriver: true
     }).start(cb)
 
-
-    this.state.pan.setValue({
-      x: 0,
-      y: 0
-    })
     this.state.pan.setOffset({
       x: 0,
       y: 0

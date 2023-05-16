@@ -64,6 +64,7 @@ declare module 'react-native-deck-swiper' {
     stackSize?: number;
     swipeAnimationDuration?: number;
     swipeBackCard?: boolean;
+    testID?: string;
     topCardResetAnimationFriction?: number;
     topCardResetAnimationTension?: number;
     useViewOverflow?: boolean;

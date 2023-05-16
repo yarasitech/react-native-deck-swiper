@@ -706,10 +706,11 @@ class Swiper extends Component {
     })
 
   render = () => {
-    const { pointerEvents, backgroundColor, marginTop, marginBottom, containerStyle, swipeBackCard } = this.props
+    const { pointerEvents, backgroundColor, marginTop, marginBottom, containerStyle, swipeBackCard, testID } = this.props
     return (
       <View
         pointerEvents={pointerEvents}
+        testID={testID}
         style={[
           styles.container,
           {
@@ -924,6 +925,7 @@ Swiper.propTypes = {
   stackSize: PropTypes.number,
   swipeAnimationDuration: PropTypes.number,
   swipeBackCard: PropTypes.bool,
+  testID: PropTypes.string,
   topCardResetAnimationFriction: PropTypes.number,
   topCardResetAnimationTension: PropTypes.number,
   verticalSwipe: PropTypes.bool,

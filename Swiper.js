@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PanResponder, Text, View, Dimensions, Animated, InteractionManager } from 'react-native'
+import { PanResponder, Text, View, Dimensions, Animated, InteractionManager, } from 'react-native'
 import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
 
@@ -37,11 +37,9 @@ const rebuildStackAnimatedValues = (props) => {
 class Swiper extends Component {
   constructor (props) {
     super(props)
-
     this.state = {
       ...calculateCardIndexes(props.cardIndex, props.cards),
-      pan: new Animated.ValueXY(),
-
+      pan: new Animated.ValueXY(),      
       previousCardX: new Animated.Value(props.previousCardDefaultPositionX),
       previousCardY: new Animated.Value(props.previousCardDefaultPositionY),
       swipedAllCards: false,
@@ -56,7 +54,6 @@ class Swiper extends Component {
     this._mounted = true
     this._animatedValueX = 0
     this._animatedValueY = 0
-
     this.state.pan.x.addListener(value => (this._animatedValueX = value.value))
     this.state.pan.y.addListener(value => (this._animatedValueY = value.value))
 
@@ -83,12 +80,12 @@ class Swiper extends Component {
   componentWillUnmountAfterInteractions = () => {
     this.state.pan.x.removeAllListeners()
     this.state.pan.y.removeAllListeners()
-    this.dimensionsChangeSubscription?.remove()
+    this.dimensionsChangeSubscription.remove()
   }
 
   componentWillUnmount = () => {
-    this._mounted = false;
-    InteractionManager.runAfterInteractions(this.componentWillUnmountAfterInteractions.bind(this));
+    this._mounted = false
+    InteractionManager.runAfterInteractions(this.componentWillUnmountAfterInteractions.bind(this))
   }
 
   getCardStyle = () => {
@@ -212,7 +209,6 @@ class Swiper extends Component {
         y: 0
       })
     }
-
     this.state.pan.setValue({
       x: 0,
       y: 0
@@ -538,11 +534,52 @@ class Swiper extends Component {
     this.setCardIndex(newCardIndex, false)
   }
 
-  jumpToCardIndex = newCardIndex => {
-    if (this.props.cards[newCardIndex]) {
+  jumpToCardIndex = (newCardIndex,direction) => {
+
+      if (!this.props.cards[newCardIndex]) {
+        return
+      }
+    
       this.setCardIndex(newCardIndex, false)
-    }
+    
+      // Set animation state
+      this.setState({
+        isJumpingToIndex: true,
+        panResponderLocked: true
+      }, () => {
+        // Start the new card from right side off-screen
+        const startX = direction === 'left' ? -411 : 411 // Left swipe comes back from left (-444), right swipe comes back from right (444)
+        this.state.pan.setValue({ x: startX, y: 0 })
+        
+        // Animate to center position
+        Animated.parallel([
+          Animated.spring(this.state.pan.x, {
+            toValue: 0,
+            friction: this.props.stackAnimationFriction,
+            tension: this.props.stackAnimationTension,
+            useNativeDriver: true
+          }),
+          // Animated.spring(this.state.pan.y, {
+          //   toValue: 0,
+          //   friction: this.props.stackAnimationFriction,
+          //   tension: this.props.stackAnimationTension,
+          //   useNativeDriver: true
+          // })
+        ]).start(() => {
+          // Animation completed, reset state
+          this.setState({
+            isJumpingToIndex: false,
+            panResponderLocked: false
+          })
+          
+          // Call onJumpToIndex callback if provided
+          if (this.props.onJumpToIndex) {
+            this.props.onJumpToIndex(newCardIndex, this.props.cards[newCardIndex])
+          }
+        })
+      })
   }
+  
   rebuildStackValues = () => {
     const stackPositionsAndScales = {}
     const { stackSize, stackSeparation, stackScale } = this.props
@@ -769,13 +806,14 @@ class Swiper extends Component {
     const renderOverlayLabel = this.renderOverlayLabel()
     renderedCards.push(
       <Animated.View
-        key={key}
-        style={firstCard ? swipableCardStyle : stackCardZoomStyle}
-        {...this._panResponder.panHandlers}
-      >
+      key={key}
+      style={firstCard ? swipableCardStyle : stackCardZoomStyle}
+      {...this._panResponder.panHandlers}
+      showsVerticalScrollIndicator={false}
+    >
         {firstCard ? renderOverlayLabel : null}
         {stackCard}
-      </Animated.View>
+    </Animated.View>
     )
   }
 

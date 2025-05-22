@@ -79,7 +79,7 @@ declare module '@vanilla-ddd/react-native-deck-swiper' {
     swipeRight: (mustDecrementCardIndex?: boolean) => void;
     swipeTop: (mustDecrementCardIndex?: boolean) => void;
     swipeBottom: (mustDecrementCardIndex?: boolean) => void;
-    jumpToCardIndex: (cardIndex: number) => void;
+    jumpToCardIndex: (cardIndex: number, direction: 'left' | 'right') => void;
     swipeBack: (
       cb?: (previousCardIndex: number, previousCard: T) => void
     ) => void;

@@ -6,11 +6,11 @@
 ## Installation
 
 ```
-yarn add react-native-deck-swiper
+yarn add npm i @vanilla-ddd/react-native-deck-swiper
 ```
 OR
 ```
-npm install react-native-deck-swiper --save
+npm install @vanilla-ddd/react-native-deck-swiper --save
 ```
 
 ## Versions info
@@ -324,7 +324,7 @@ render () {
 }
 ```
 
-Demo inside the [Example Folder](https://github.com/webraptor/react-native-deck-swiper/tree/master/example)
+Demo inside the [Example Folder](https://github.com/vanilla-dd/react-native-deck-swiper/tree/master/example)
 
 ## Stylesheet example
 

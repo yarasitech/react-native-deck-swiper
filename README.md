@@ -6,11 +6,11 @@
 ## Installation
 
 ```
-yarn add npm i @vanilla-ddd/react-native-deck-swiper
+yarn add npm i @yarasitech/react-native-deck-swiper
 ```
 OR
 ```
-npm install @vanilla-ddd/react-native-deck-swiper --save
+npm install @yarasitech/react-native-deck-swiper --save
 ```
 
 ## Versions info

@@ -1,4 +1,4 @@
-declare module '@vanilla-ddd/react-native-deck-swiper' {
+declare module '@yarasitech/react-native-deck-swiper' {
   import {StyleProp, ViewStyle} from 'react-native';
 
   export interface SwiperProps<T> {

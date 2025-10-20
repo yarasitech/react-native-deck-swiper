@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/yarasitech/react-native-deck-swiper#readme",
   "dependencies": {
+    "lodash": "^4.17.5",
     "prop-types": "15.5.10"
   },
   "peerDependencies": {
